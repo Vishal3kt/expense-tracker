@@ -1,0 +1,137 @@
+<div class="dashboard-container">
+    <div class="cards-container">
+        <!-- <div class="title-section">
+            <h2 class="title">Category Details</h2>
+        </div> -->
+        <ul class="cards-wrapper">
+
+            <!-- Income Card -->
+            <li class="income-card" [ngClass]="{'disable' : isExpenseEditable}">
+                <div class="card-title">
+                    <h4>Total Income</h4>
+                    <button *ngIf="!isIncomeEditable" matTooltip="Edit"
+                        (click)="enableEditMode()"><mat-icon>edit</mat-icon></button>
+                    <button *ngIf="isIncomeEditable" matTooltip="Save" (click)="saveIncomeData()"><mat-icon
+                            style="color: #006AFF;">save</mat-icon></button>
+                </div>
+                <h3 *ngIf="!isIncomeEditable"><span *ngIf="!isIncomeVisible">₹ xx,xxx</span> <span
+                        *ngIf="isIncomeVisible">{{incomeAmt |
+                        currencyFormatter}}</span>
+                    <mat-icon *ngIf="!isIncomeVisible" matTooltip="show"
+                        (click)="isIncomeVisible = true">visibility</mat-icon>
+                    <mat-icon *ngIf="isIncomeVisible" matTooltip="hide"
+                        (click)="isIncomeVisible = false">visibility_off</mat-icon>
+                </h3>
+                <input type="number" #inputField [(ngModel)]="incomeAmt" placeholder="Enter Income"
+                    *ngIf="isIncomeEditable" (keypress)="handleKeyInput($event)">
+            </li>
+
+            <!-- Expense Card  -->
+            <li class="expense-card" [ngClass]="{'enable' : isExpenseEditable}">
+                <div class="card-title">
+                    <h4>{{ isExpenseEditable ? "Add New Expense" : "Total Expenses"}}</h4>
+                    <button (click)="isExpenseEditable = true" matTooltip="Add new"
+                        *ngIf="!isExpenseEditable"><mat-icon>add</mat-icon></button>
+                    <span class="balance-small-text" *ngIf="isExpenseEditable">Balance : {{ balanceAmt |
+                        currencyFormatter}}</span>
+                </div>
+                <h3 *ngIf="!isExpenseEditable">{{expenseAmt | currencyFormatter}}</h3>
+                <form [formGroup]="expenseForm" *ngIf="isExpenseEditable" (submit)="fetchFormData()">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Select date</mat-label>
+                        <input [max]="todayDate" matInput [matDatepicker]="picker" (click)="picker.open()"
+                            formControlName="date">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Expense Amount</mat-label>
+                        <input matInput type="number" placeholder="Enter amount" formControlName="amount">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Expense Description</mat-label>
+                        <input matInput placeholder="Enter expense description" formControlName="description">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Expense Category</mat-label>
+                        <mat-select formControlName="category">
+                            <mat-option style="color: #334D6C;" value="food">Food<mat-icon>
+                                    fastfood</mat-icon></mat-option>
+                            <mat-option style="color: #DE686C; "
+                                value="travel">Travel<mat-icon>card_travel</mat-icon></mat-option>
+                            <mat-option style="color: #6A5676;" value="shopping">Shopping
+                                <mat-icon>add_shopping_cart</mat-icon></mat-option>
+                            <mat-option style="color: #E3A787;" value="grocery">Grocery <mat-icon>
+                                    local_grocery_store</mat-icon></mat-option>
+                            <mat-option style="color: #AF6272;"
+                                value="movie">Movie<mat-icon>movie</mat-icon></mat-option>
+                            <mat-option style="color: #80944C;" value="others">Others<mat-icon>
+                                    local_atm</mat-icon></mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div class="btns-wrapper" *ngIf="isExpenseEditable">
+                        <button mat-raised-button *ngIf="isExpenseEditable" class="add-btn" type="submit"
+                            [disabled]="!expenseForm.valid" matTooltip="submit"><mat-icon>send</mat-icon>
+                            Submit</button>
+                        <button mat-raised-button (click)="isExpenseEditable = false" *ngIf="isExpenseEditable"
+                            class="close-btn" matTooltip="Cancel"><mat-icon>close</mat-icon> Cancel</button>
+                    </div>
+                </form>
+
+            </li>
+
+            <!-- Balance Card -->
+            <li class="balance-card" [ngClass]="{'disable' : isExpenseEditable}">
+                <div class="card-title">
+                    <h4>Balance</h4>
+                </div>
+                <h3>
+                    <span *ngIf="!isBalanceVisible">₹ xx,xxx</span>
+                    <span *ngIf="isBalanceVisible">{{balanceAmt | currencyFormatter}}</span>
+
+                    <mat-icon *ngIf="!isBalanceVisible" matTooltip="show"
+                        (click)="isBalanceVisible = true">visibility</mat-icon>
+                    <mat-icon *ngIf="isBalanceVisible" matTooltip="hide"
+                        (click)="isBalanceVisible = false">visibility_off</mat-icon>
+                </h3>
+            </li>
+        </ul>
+        <div class="graph-wrapper">
+            <div id="container" class="dashboard-chart"></div>
+        </div>
+    </div>
+    <div class="table-container">
+        <div class="table-wrapper">
+            <div class="table">
+                <table id="expense-table" datatable [dtOptions]="dt0ptions">
+                    <thead>
+                        <tr>
+                            <th>Sl No</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let expense of expenses; let i = index" class="{{expense.category}}">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{expense.amount | currencyFormatter}}</td>
+                            <td>{{expense.date}}</td>
+                            <td class="category">{{expense.category }}</td>
+                            <td class="description">{{expense.description}}</td>
+                            <td style="text-align: center;"><button matTooltip="Delete"
+                                    (click)="deleteData(i)">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

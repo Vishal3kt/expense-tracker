@@ -1,0 +1,9 @@
+<div class="main-body-container">
+    <div class="navbar-wrapper" [ngClass]="{'active' : isNavbarOpen}">
+        <app-navbar (closeMenu)="closeMenu($event)"></app-navbar>
+    </div>
+    <div class="main-content-wrapper">
+        <app-header></app-header>
+        <router-outlet></router-outlet>
+    </div>
+</div>

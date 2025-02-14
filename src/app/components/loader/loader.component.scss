@@ -1,0 +1,43 @@
+.loader-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: #ffffff30;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+
+  .text-wrapper {
+    p {
+      font-size: 26px;
+      font-weight: 700;
+      color: #666666;
+      animation: stretch2 1s linear infinite alternate-reverse;
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .loader-wrapper {
+    .text-wrapper {
+      p {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+@keyframes stretch2 {
+  0% {
+    letter-spacing: 6px;
+  }
+
+  100% {
+    letter-spacing: 0;
+  }
+}

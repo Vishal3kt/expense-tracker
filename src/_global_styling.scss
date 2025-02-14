@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  outline: transparent;
+}
+
+body {
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+
+  &:disabled {
+    background: #cccccc !important;
+    color: #ffffff !important;
+    pointer-events: none !important;
+    opacity: 0.6;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.mdc-snackbar.mat-mdc-snack-bar-container {
+  margin-top: 38px;
+}
+
+.mat-icon.material-icons {
+  width: unset;
+  height: unset;
+}
+
+.dashboard-container {
+  position: relative;
+  animation: slideIn 0.4s ease forwards;
+}
+
+.statistics-container {
+  animation: slideIn 0.4s ease forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.highcharts-title {
+  text-align: center;
+  fill: #5e5e5e !important;
+  font-weight: 500 !important;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #e4e4e4;
+  padding-bottom: 6px;
+  font-size: 16px !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+
+  &-thumb {
+    background: #334d6c;
+    border-radius: 2px;
+  }
+}
+
+.highcharts-credits,
+.dataTables_processing {
+  display: none !important;
+}
+
+.mdc-snackbar__surface {
+  background: #006aff;
+}
